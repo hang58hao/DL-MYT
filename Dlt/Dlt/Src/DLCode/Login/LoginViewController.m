@@ -22,6 +22,8 @@
 #import "DLAdverAgreementViewController.h"
 #import "XWCountryCodeController.h"
 #import <RongIMKit/RongIMKit.h>
+
+
 @interface LoginViewController ()<UITextFieldDelegate,RCIMUserInfoDataSource,XWCountryCodeControllerDelegate,RCIMGroupInfoDataSource>
 {
     NSString * newpassword;
@@ -54,7 +56,8 @@
     self.view.backgroundColor =[UIColor whiteColor];
     [self setup];
     
-  
+    NSString *accout = [[NSUserDefaults standardUserDefaults] objectForKey:MYUserAccount];
+    self.phoneField.text = accout;
    
 }
 
@@ -374,7 +377,9 @@
     }else{
         accountStr= [NSString stringWithFormat:@"+%@%@",[_regionBtn.titleLabel.text componentsSeparatedByString:@"+"][1],self.phoneField.text];
         
-    }
+    } //再次存储账号
+    [[NSUserDefaults standardUserDefaults] setObject:accountStr forKey:MYUserAccount];
+    [[NSUserDefaults standardUserDefaults] synchronize];
    NSString *password = [CLMd5Tool MD5ForLower32Bate:_passwordField.text];
     @weakify(self);
     [[[DLTUserCenter userCenter] login:accountStr

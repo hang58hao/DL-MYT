@@ -169,7 +169,8 @@ static DLTUserCenter *_userCenter = nil;
     return [[[[[RACSignal
                 createSignal:^RACDisposable *(id<RACSubscriber>subscriber) {
                     @strongify(self);
-                    [self remoteToken: @{@"account":account,@"password":pwd}
+                     NSString  * saveKeyAccountStr = [KeyChainManager readUUID];
+                    [self remoteToken: @{@"account":account,@"password":pwd,@"login_device_id":saveKeyAccountStr}
                          successBlock:^(id response) {   // remote token
                              @strongify(self);
                              int code = [response[@"code"] intValue];
@@ -217,7 +218,7 @@ static DLTUserCenter *_userCenter = nil;
 }
 
 - (void)remoteToken:(NSDictionary *)param successBlock:(void(^)(id result))success failure:(dispatch_block_t)failure{
-  NSString * url = [NSString stringWithFormat:@"%@UserCenter/login",BASE_URL];
+  NSString * url = [NSString stringWithFormat:@"%@UserCenter/login2",BASE_URL];
   [BANetManager ba_request_POSTWithUrlString:url
                                   parameters:param
                                 successBlock:^(id response) {
